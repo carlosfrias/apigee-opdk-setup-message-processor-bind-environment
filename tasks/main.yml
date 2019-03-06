@@ -7,4 +7,5 @@
     user: '{{ opdk_user_email }}'
     password: '{{ opdk_user_pass }}'
     body: action=add&uuid={{ edge_mp_self.uUID }}
+  delegate_to: "{{ local_mgmt_ip | default(ansible_default_ipv4.address) }}"
 
