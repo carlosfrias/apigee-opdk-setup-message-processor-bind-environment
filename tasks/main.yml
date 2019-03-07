@@ -1,11 +1,21 @@
 ---
 # tasks file for /Users/carlosfrias/apigee-workspace/opdk-workspace/apigee-opdk-setup-message-processor-bind-environment
-- name: Bind message processor to environment {{ env_name }}
-  uri:
-    url: http://{{ local_mgmt_ip }}:8080/v1/organizations/{{ org_name }}/environments/{{ env_name }}/servers
-    method: POST
-    user: '{{ opdk_user_email }}'
-    password: '{{ opdk_user_pass }}'
-    body: action=add&uuid={{ edge_mp_self.uUID }}
-  delegate_to: "{{ local_mgmt_ip | default(ansible_default_ipv4.address) }}"
+- block:
+  - name: Bind message processor to environment {{ env_name }}
+    uri:
+      url: http://{{ local_mgmt_ip }}:8080/v1/organizations/{{ org_name }}/environments/{{ env_name }}/servers
+      method: POST
+      user: '{{ opdk_user_email }}'
+      password: '{{ opdk_user_pass }}'
+      body: action=add&uuid={{ edge_mp_self.uUID }}
+
+  rescue:
+  - name: Bind message processor to environment {{ env_name }}
+    uri:
+      url: http://{{ local_mgmt_ip }}:8080/v1/organizations/{{ org_name }}/environments/{{ env_name }}/servers
+      method: POST
+      user: '{{ opdk_user_email }}'
+      password: '{{ opdk_user_pass }}'
+      body: action=add&uuid={{ edge_mp_self.uUID }}
+    delegate_to: "{{ local_mgmt_ip | default(ansible_default_ipv4.address) }}"
 
